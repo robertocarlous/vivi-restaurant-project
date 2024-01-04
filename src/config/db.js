@@ -1,8 +1,17 @@
 const dotenv = require("dotenv")
 dotenv.config()
 
-const bcryptconfig = +process.env.BCRYPT_SALT_ROUND 
+const bcrypt_salt_round = parseInt(process.env.BCRYPT_SALT_ROUND) || 10;
 
 module.exports = {
-  bcrypt_salt_round: bcryptconfig,
+  bcrypt_salt_round: bcrypt_salt_round,
 };
+
+// database connection
+const connectDB = {
+  mongodb_connection_url: require('dotenv').config().parsed.MongoURI,
+};
+
+module.exports = connectDB;
+
+
