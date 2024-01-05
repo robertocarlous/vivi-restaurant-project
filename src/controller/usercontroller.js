@@ -1,18 +1,31 @@
-const User = require("../models/usersmodel")
+const User = require("../models/usermodel")
 const bcrypt = require("bcrypt")
 const bcryptconfig = require("../config/db")
+const signupValidator = require("../validators/userValidator")
+
+
 class UserController {
   static async Register(req, res, next) {
-    try {
-      const { email, password, fullname, confirmPassword, phone, referralcode } = req.body;
-      const user = await User.find({email:req.body.email});
-      if (user) {
-        throw new Error("User already exists");
-      }
-      const saltround = bcryptconfig.bcrypt_salt_round
-      const hashedPassword =  bcrypt.hashSync(password, saltround);
+    const { error } = signupValidator.validate(req.body)
+    if (error) {
+      return res.status(400).json({ error: error.message });
+    }
 
-      const newUser = await User.createUser({
+    try {  
+      const { email, password, fullname, confirmPassword, phone, referralcode } = req.body;
+
+      const emailExist = await User.find({email:req.body.email});
+
+      if (emailExist.length > 0) {
+        return res.status(409).json({
+          status: "failed",
+          message: "An account with this email already exists",
+        });
+      }
+      const saltround = bcrypt.genSaltSync(bcryptconfig.bcrypt_salt_round);
+      const hashedPassword =  bcrypt.hashSync(req.body.password, saltround);
+
+      const newUser = await User.create({
         email,
         password: hashedPassword,
         fullname,
@@ -39,7 +52,7 @@ class UserController {
 }
 
 
-module.exports = {UserController};
+module.exports = UserController;
 
 
 
