@@ -15,7 +15,7 @@ class UserController {
 
     try {  
       const { email, password, fullname, confirmPassword, phone, referralcode } = req.body;
-
+      
       const emailExist = await User.find({email:req.body.email});
 
       if (emailExist.length > 0) {

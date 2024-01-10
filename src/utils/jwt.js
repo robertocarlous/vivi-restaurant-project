@@ -7,13 +7,11 @@ function genToken(user) {
     id: user._id,
     email: user.email,
   };
-  const token = jwt.sign(payload, jwtConfig.jwt_key, {
+  const token = jwt.sign(payload, process.env.JWT_SECRET, {
     expiresIn: process.env.EXPIRESIN
   });
   return token;
 }
-
-
 
 
 // function authToken(token) {

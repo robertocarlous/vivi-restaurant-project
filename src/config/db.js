@@ -16,11 +16,7 @@ const connectDB = {
 module.exports = connectDB;
 
 
-//jwt configurtaion for login 
-const jwtConfig = {
-  jwt_key: process.env.JWT_SECRET,
-};
-module.exports = { jwtConfig };
+
 
 
 
