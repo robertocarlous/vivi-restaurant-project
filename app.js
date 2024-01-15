@@ -1,7 +1,10 @@
 const express = require("express");
 const dotenv = require("dotenv");
 const mongoose = require ("mongoose");
+const createError = require("http-errors")
 const authRouter = require("./src/route/userroute").router;
+const errorHandler = require("./src/middleware/errorHandler")
+
 
 
 dotenv.config();
@@ -15,6 +18,7 @@ const port =process.env.PORT
 
 
 app.use(express.json());
+app.use(errorHandler)
 
 
 // Routes

@@ -4,8 +4,6 @@ const bcryptconfig = require("../config/db")
 const signupValidator = require("../validators/userValidator")
 const {genToken} = require("../utils/jwt.js")
 
-
-
 class UserController {
   static async Register(req, res, next) {
     const { error } = signupValidator.validate(req.body)

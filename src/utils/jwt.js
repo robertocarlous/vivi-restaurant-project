@@ -14,16 +14,16 @@ function genToken(user) {
 }
 
 
-// function authToken(token) {
-//   try {
-//     return jwt.verify(token, jwtConfig.jwt_key);
-//   } catch (error) {
-//     console.log(error);
-//     return { error: "internal server error" };
-//   }
-// }
+function authToken(token) {
+  try {
+    return jwt.verify(token, process.env.JWT_SECRET);
+  } catch (error) {
+    console.log(error);
+    return { error: "internal server error" };
+  }
+}
 
 module.exports = {
   genToken,
-  //authToken,
+  authToken,
 };
