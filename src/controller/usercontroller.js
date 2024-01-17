@@ -3,6 +3,13 @@ const bcrypt = require("bcrypt")
 const bcryptconfig = require("../config/db")
 const signupValidator = require("../validators/userValidator")
 const {genToken} = require("../utils/jwt.js")
+const  {
+  BadRequestError,
+  NotFoundError,
+  ConflictError,
+  InternalServerError} = require("../middleware/customerror.js")
+
+
 
 class UserController {
   static async Register(req, res, next) {
@@ -17,10 +24,11 @@ class UserController {
       const emailExist = await User.find({email:req.body.email});
 
       if (emailExist.length > 0) {
-        return res.status(409).json({
-          status: "failed",
-          message: "An account with this email already exists",
-        });
+        return next(new ConflictError("An account with this email already exists"));
+        //return res.status(409).json({
+          //status: "failed",
+          //message: "An account with this email already exists",
+        //});
       }
       const saltround = bcrypt.genSaltSync(bcryptconfig.bcrypt_salt_round);
       const hashedPassword =  bcrypt.hashSync(req.body.password, saltround);
@@ -73,15 +81,16 @@ class UserController {
       res.status(200).json({
         status: "Success",
         message: "User login successful",
-        logintoken: genToken(user)
+        logintoken: genToken(users)
       
       });
     } catch (error) {
       console.log(error);
-      res.status(500).json({
-        status: "failed",
-        message: "internal error",
-      });
+      return next(new InternalServerError("Internal server error"));
+      // res.status(500).json({
+      //   status: "failed",
+      //   message: "internal error",
+      // });
     }
   }
 
