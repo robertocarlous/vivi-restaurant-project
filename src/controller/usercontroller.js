@@ -25,10 +25,6 @@ class UserController {
 
       if (emailExist.length > 0) {
         return next(new ConflictError("An account with this email already exists"));
-        //return res.status(409).json({
-          //status: "failed",
-          //message: "An account with this email already exists",
-        //});
       }
       const saltround = bcrypt.genSaltSync(bcryptconfig.bcrypt_salt_round);
       const hashedPassword =  bcrypt.hashSync(req.body.password, saltround);
@@ -51,10 +47,7 @@ class UserController {
       });
     } catch (error) {
       console.log(error);
-      res.status(500).json({
-        status: "failed",
-        message: "internal error",
-      });
+      return next(new InternalServerError("Internal server error"));
     }
   }
 
@@ -64,39 +57,25 @@ class UserController {
     try {  
       const user = await User.findOne({email:req.body.email});
       if (!user) {
-        return res.status(409).json({
-          status: "failed",
-          message: "user does not exist",
-        });
+        return next(new ConflictError("An account with this email already exists"));
       }
       const password = bcrypt.compareSync(req.body.password, user.password)
       if(!password){
-        return res.status(409).json({
-          status:"failed",
-          message:"incorrect password/email"
-        })
+        return next(new ConflictError("Incorrect password/email"));
       }
 
-  
       res.status(200).json({
         status: "Success",
         message: "User login successful",
-        logintoken: genToken(users)
+        logintoken: genToken(user)
       
       });
     } catch (error) {
       console.log(error);
       return next(new InternalServerError("Internal server error"));
-      // res.status(500).json({
-      //   status: "failed",
-      //   message: "internal error",
-      // });
     }
   }
-
-
-  } 
-
+}
 
 module.exports = UserController;
 
