@@ -24,7 +24,7 @@ const signupValidator = Joi.object({
     .messages({
       "any.only": "Passwords do not match",
     }),
-  mobile: Joi.string(),
+  phone: Joi.string(),
   referralCode: Joi.string(),
   role: Joi.string().valid('user', 'admin', 'superadmin').optional(),
 }).strict()

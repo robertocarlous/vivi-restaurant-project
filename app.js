@@ -9,7 +9,7 @@ const errorHandler = require("./src/middleware/errorHandler")
 
 dotenv.config();
 
-// const { default: listEndpoints } = require("list_end_points");
+const { default: listEndpoints } = require("list_end_points");
 
 const { connectDB } = require("./src/config/db");
 
@@ -25,7 +25,7 @@ app.use(errorHandler)
 app.use("/viviskitchen", authRouter);
 
 
-// listEndpoints(app);
+ listEndpoints(app);
 
 app.listen( port,()=>{
     console.log(`app is listening on port ${port}...`)

@@ -19,7 +19,7 @@ class UserController {
     }
 
     try {  
-      const { email, password, fullname, confirmPassword, phone, referralcode } = req.body;
+      const { email, password, fullname, confirmPassword, phone, referralcode, role} = req.body;
       
       const emailExist = await User.find({email:req.body.email});
 
@@ -35,7 +35,8 @@ class UserController {
         fullname,
         confirmPassword: hashedPassword,
         phone,
-        referralcode
+        referralcode,
+        role
       });
      
       res.status(200).json({
