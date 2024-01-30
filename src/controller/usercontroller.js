@@ -1,6 +1,6 @@
 const User = require("../models/usermodel")
 const bcrypt = require("bcrypt")
-const bcryptconfig = require("../config/db")
+const bcryptConfig = require("../config/db")
 const signupValidator = require("../validators/userValidator")
 const {genToken} = require("../utils/jwt.js")
 const  {
@@ -8,7 +8,6 @@ const  {
   NotFoundError,
   ConflictError,
   InternalServerError} = require("../middleware/customerror.js")
-
 
 
 class UserController {
@@ -26,8 +25,11 @@ class UserController {
       if (emailExist.length > 0) {
         return next(new ConflictError("An account with this email already exists"));
       }
-      const saltround = bcrypt.genSaltSync(bcryptconfig.bcrypt_salt_round);
+  
+
+      const saltround = bcrypt.genSaltSync(bcryptConfig.bcrypt_salt_round);
       const hashedPassword =  bcrypt.hashSync(req.body.password, saltround);
+      
 
       const newUser = await User.create({
         email,
@@ -58,7 +60,7 @@ class UserController {
     try {  
       const user = await User.findOne({email:req.body.email});
       if (!user) {
-        return next(new ConflictError("An account with this email already exists"));
+        return next(new ConflictError("this account does not exists"));
       }
       const password = bcrypt.compareSync(req.body.password, user.password)
       if(!password){

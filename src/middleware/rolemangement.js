@@ -5,8 +5,6 @@ const isSuperAdmin = async (req, res, next) => {
         if (!user) {
             return res.status(401).json({ error: "Unauthorized user" });
         }
-        console.log(user.role);
-
         if (user.role !== "superadmin") {
             return res.status(403).json({ error: "Forbidden! Super admin access is required" });
         }
@@ -23,13 +21,11 @@ const isSuperAdmin = async (req, res, next) => {
 
 const admin = async (req, res, next) => {
     try {
-        const user = req.user;
-        
+        const user = req.user;        
         if (!user) {
             return res.status(401).json({ error: "Unauthorized user" });
         }
-        console.log(user.role);
-
+        
         if (user.role !== "admin") {
             return res.status(403).json({ error: "Forbidden!admin access is required" });
         }
@@ -44,4 +40,31 @@ const admin = async (req, res, next) => {
     }
 };
 
-module.exports = { isSuperAdmin, admin };
+
+
+const isBothAdmin = async (req, res, next) => {
+  try {
+    const user = req.user;
+    console.log(user)
+    if (!user) {
+      return res.status(401).json({ error: "Unauthorized user" });
+    }
+
+    
+    if (user.role !== "superadmin" && user.role !== "admin") {
+      return res.status(403).json({ error: "Forbidden! Admin access is required" });
+    }
+
+    next();
+  } catch (error) {
+    console.log(error);
+    res.status(500).json({
+      status: "failed",
+      message: "Access denied, invalid token.",
+    });
+  }
+};
+
+
+module.exports = { isSuperAdmin, admin, isBothAdmin };
+
