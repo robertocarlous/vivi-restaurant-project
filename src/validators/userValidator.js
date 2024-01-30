@@ -24,9 +24,27 @@ const signupValidator = Joi.object({
     .messages({
       "any.only": "Passwords do not match",
     }),
-  mobile: Joi.string(),
+  phone: Joi.string(),
   referralCode: Joi.string(),
   role: Joi.string().valid('user', 'admin', 'superadmin').optional(),
 }).strict()
 
-module.exports = signupValidator;
+const login = Joi.object({
+  email: Joi.string()
+  .regex(/^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$/)
+  .required()
+  .messages({
+    "string.pattern.base": "Email is not a valid email format/address",
+  }),
+password: Joi.string()
+  .regex(
+    /^(?=.*\d)(?=.*[a-z])(?=.*[A-Z])(?=.*[!@#$%^&*()_+\-=[\]{};':"\\|,.<>/?]).{6,}$/
+  )
+  .required()
+  .messages({
+    "string.pattern.base":
+      "You need one number, one alphanumeric character and one in caps, password be more than 6 characters long",
+  }),
+})
+ 
+module.exports = signupValidator, login;
