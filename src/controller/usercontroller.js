@@ -3,6 +3,7 @@ const bcrypt = require("bcrypt")
 const bcryptConfig = require("../config/db")
 const signupValidator = require("../validators/userValidator")
 const {genToken} = require("../utils/jwt.js")
+const nodemailer = require("nodemailer")
 const  {
   BadRequestError,
   NotFoundError,
@@ -18,7 +19,7 @@ class UserController {
     }
 
     try {  
-      const { email, password, fullname, confirmPassword, phone, referralcode, role} = req.body;
+      const {email, password, fullname, confirmPassword, phone, referralcode, role} = req.body;
       
       const emailExist = await User.find({email:req.body.email});
 
@@ -26,6 +27,31 @@ class UserController {
         return next(new ConflictError("An account with this email already exists"));
       }
   
+
+const transporter = nodemailer.createTransport({
+  service: 'gmail',
+  auth: {
+    user: process.env.gmailauth,
+    pass: process.env.gmailpass,
+  }
+});
+
+const mailOptions = {
+  from: 'robbertabimbola21@gmail.com',
+  to: email,
+  subject: 'account sucessfully created',
+  text: 'you have successfully sign up to vivis kitchen'
+};
+
+transporter.sendMail(mailOptions, function(error, info){
+  if (error) {
+    console.log(error);
+  } else {
+    console.log('Email sent: ' + info.response);
+  }
+  return res.status(200).json({message:"signup email sent"})
+});
+
 
       const saltround = bcrypt.genSaltSync(bcryptConfig.bcrypt_salt_round);
       const hashedPassword =  bcrypt.hashSync(req.body.password, saltround);
@@ -62,10 +88,34 @@ class UserController {
       if (!user) {
         return next(new ConflictError("this account does not exists"));
       }
+      const transporter = nodemailer.createTransport({
+        service: 'gmail',
+        auth: {
+          user: process.env.gmailauth,
+          pass: process.env.gmailpass,
+        }
+      });
+      
+      const mailOptions = {
+        from: 'robbertabimbola21@gmail.com',
+        to: req.body.email,
+        subject: 'Vivis-Kitchen ',
+        text: 'Hi Robbert, you logged into your account if this login did not originate from you please let us know'
+      };
+      
+      transporter.sendMail(mailOptions, function(error, info){
+        if (error) {
+          console.log(error);
+        } else {
+          console.log('Email sent: ' + info.response);
+        }
+        return res.status(200).json({message:"signup email sent"})
+      });
       const password = bcrypt.compareSync(req.body.password, user.password)
       if(!password){
         return next(new ConflictError("Incorrect password/email"));
       }
+
 
       res.status(200).json({
         status: "Success",

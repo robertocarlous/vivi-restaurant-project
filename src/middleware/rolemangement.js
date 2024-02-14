@@ -45,7 +45,6 @@ const admin = async (req, res, next) => {
 const isBothAdmin = async (req, res, next) => {
   try {
     const user = req.user;
-    console.log(user)
     if (!user) {
       return res.status(401).json({ error: "Unauthorized user" });
     }

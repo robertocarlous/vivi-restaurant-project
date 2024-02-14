@@ -18,6 +18,10 @@
     "jsonwebtoken": "^9.0.2",
     "list_end_points": "^2.0.6",
     "mongoose": "^8.0.3",
+    "nodemailer": "^6.9.9",
     "uuid": "^9.0.1"
+  },
+  "devDependencies": {
+    "nodemon": "^3.0.3"
   }
 }
