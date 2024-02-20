@@ -1,20 +1,18 @@
 const express = require("express");
-const dotenv = require("dotenv");
 const mongoose = require ("mongoose");
 const createError = require("http-errors")
 const authRouter = require("./src/route/userroute").router;
+const blogroute = require("./src/route/blogroute").router;
+const eventRouter = require("./src/route/eventroute").router
+const contactRouter = require("./src/route/contactroute").router
 const errorHandler = require("./src/middleware/errorHandler")
 
 
-
-dotenv.config();
-
-// const { default: listEndpoints } = require("list_end_points");
-
-const { connectDB } = require("./src/config/db");
-
 const app = express();
 const port =process.env.PORT
+
+
+const { default: listEndpoints } = require("list_end_points");
 
 
 app.use(express.json());
@@ -23,9 +21,12 @@ app.use(errorHandler)
 
 // Routes
 app.use("/viviskitchen", authRouter);
+app.use("/blogposts", blogroute);
+app.use("/event", eventRouter);
+app.use("/contact", contactRouter);
 
 
-// listEndpoints(app);
+ listEndpoints(app);
 
 app.listen( port,()=>{
     console.log(`app is listening on port ${port}...`)
@@ -34,7 +35,7 @@ app.listen( port,()=>{
 // mongodb connection
 mongoose
   .connect(process.env.MongoURI)
-  .then(() => console.log("Database Connection Established"))
+  .then(() => console.log("Database Connection Established!"))
   .catch((e) => console.log(e.message));
 
 
