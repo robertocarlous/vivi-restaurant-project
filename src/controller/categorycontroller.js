@@ -3,14 +3,20 @@ const categoryValidator = require("../validators/categoryvalidator")
 
 const createCategory = async (req, res) => {
   try {
-    const {error} = categoryValidator.validate(req.body);
+    const { error } = categoryValidator.validate(req.body);
     if (error) {
-        return res.status(400).json({ error: error.message });
-      }
-      
+      return res.status(400).json({ error: error.message });
+    }
+
     const { name } = req.body;
+
+    const existingCategory = await Category.findById({ name });
+    if (existingCategory) {
+      return res.status(409).json({ error: "Category already exists" });
+    }
     const category = new Category({ name });
     const savedCategory = await category.save();
+
     res.status(200).json({
       status: "Success",
       message: "Category created successfully",

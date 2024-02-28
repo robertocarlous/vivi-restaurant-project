@@ -6,6 +6,7 @@ const blogroute = require("./src/route/blogroute").router;
 const eventRouter = require("./src/route/eventroute").router
 const contactRouter = require("./src/route/contactroute").router
 const categoryRouter = require("./src/route/categoryroute").router
+const productRouter = require("./src/route/productroute").router
 const errorHandler = require("./src/middleware/errorHandler")
 
 
@@ -21,11 +22,12 @@ app.use(errorHandler)
 
 
 // Routes
-app.use("/viviskitchen/signup", authRouter);
+app.use("/viviskitchen", authRouter);
 app.use("/viviskitchen/blogposts", blogroute);
 app.use("/viviskitchen/event", eventRouter);
 app.use("/viviskitchen/contact", contactRouter);
-app.use("/viviskitchen/category", categoryRouter)
+app.use("/viviskitchen/category", categoryRouter);
+app.use("/viviskitchen/product", productRouter);
 
 
  listEndpoints(app);
