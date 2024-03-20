@@ -7,6 +7,8 @@ const eventRouter = require("./src/route/eventroute").router
 const contactRouter = require("./src/route/contactroute").router
 const categoryRouter = require("./src/route/categoryroute").router
 const productRouter = require("./src/route/productroute").router
+const cartroute = require("./src/route/cartroute").router
+
 const errorHandler = require("./src/middleware/errorHandler")
 
 
@@ -28,9 +30,11 @@ app.use("/viviskitchen/event", eventRouter);
 app.use("/viviskitchen/contact", contactRouter);
 app.use("/viviskitchen/category", categoryRouter);
 app.use("/viviskitchen/product", productRouter);
+app.use("/viviskitchen/cart", cartroute);
 
 
- listEndpoints(app);
+
+listEndpoints(app);
 
 app.listen( port,()=>{
     console.log(`app is listening on port ${port}...`)

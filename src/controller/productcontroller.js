@@ -8,7 +8,7 @@ const createProduct = async (req, res) => {
       return res.status(400).json({ error: error.message });
     }
 
-    const { name, price, description, tax } = req.body;
+    const { name, price, description, tax, taxAmount } = req.body;
 
     // Check if the product already exists
     const existingProduct = await Product.findOne({name});
@@ -19,7 +19,7 @@ const createProduct = async (req, res) => {
 
 
     // Create and save the new product
-    const product = new Product({ name, price, description, tax });
+    const product = new Product({ name, price, description, tax, taxAmount});
     const savedProduct = await product.save();
 
     // Respond with success message

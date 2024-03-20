@@ -11,7 +11,7 @@ const productSchema = new Schema(
     //     required: true,
     //   },
     price:{
-        type:String,
+        type:Number,
         required:true,
     },
     description:{
@@ -22,6 +22,10 @@ const productSchema = new Schema(
       type:String,
       enum:["tax", "non-tax"]
     },
+    taxAmount:{
+      type: Number,
+      required: false,
+    }
     
     },
     {
@@ -29,7 +33,7 @@ const productSchema = new Schema(
     }
   );
   
-  module.exports = mongoose.model("product", productSchema);
+  module.exports = mongoose.model("Product", productSchema);
   
 
 

@@ -26,7 +26,7 @@ const createBlogPost = async (req, res) => {
     });
   } catch (error) {
     console.log(error);
-    res.status(400).json({ error: error.message });
+    res.status(400).json({ error: error.message, success:false });
   }
 };
 
@@ -43,7 +43,7 @@ const getAllBlogPosts = async (req, res) => {
       data:blogPosts
     })
     } catch (error) {
-      res.status(500).json({ error: error.message });
+      res.status(500).json({ error: error.message, success:false });
     }
   };
   
@@ -56,7 +56,7 @@ const getBlogPostById = async (req, res) => {
       const blogPost = await BlogPost.findById(postId).populate('postedBy', 'fullname');
       
       if (!blogPost) {
-        return res.status(404).json({ error: 'Blog post not found.' });
+        return res.status(404).json({ error: 'Blog post not found.', success: false });
       }
       res.status(200).json({ 
       status: "Success", 
@@ -65,7 +65,7 @@ const getBlogPostById = async (req, res) => {
     })
 
     } catch (error) {
-      res.status(500).json({ error: error.message });
+      res.status(500).json({ error: error.message, success: false });
     }
   };
 
@@ -80,7 +80,7 @@ const getBlogPostById = async (req, res) => {
       const blogPost = await BlogPost.findById(postId);
   
       if (!blogPost) {
-        return res.status(404).json({ error: 'Blog post not found.' });
+        return res.status(404).json({ error: 'Blog post not found.' , success:false });
       }
   
       if (req.user && (req.user.role === 'admin' || req.user._id.equals(blogPost.postedBy))) {
@@ -89,11 +89,11 @@ const getBlogPostById = async (req, res) => {
         const updatedBlogPost = await blogPost.save();
         res.status(200).json({ 
           status: "Success",
-          message: "blog updated sucessfully",
+          message: "blog updated sucessfully", success: true,
           data:updatedBlogPost
         })
       } else {
-        return res.status(403).json({ error: 'Forbidden! Admin or author access is required.' });
+        return res.status(403).json({ error: 'Forbidden! Admin or author access is required.' ,  success:false});
       }
     } catch (error) {
       res.status(400).json({ error: error.message });
