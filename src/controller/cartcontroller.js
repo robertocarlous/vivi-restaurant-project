@@ -25,6 +25,7 @@ const addCart = async (req, res) => {
       let productPrice = product.price
 
       console.log(taxAmount,totalPrice, totalTaxAmount, finalAmount, productPrice)
+
       let cart = await Cart.findOne({ userId: req.user._id }); 
       
       if (!cart) {
@@ -70,7 +71,6 @@ const addCart = async (req, res) => {
 
 const getCartItems = async (req, res) => {
   try {
-    // Find the cart for the user
     const cart = await Cart.findOne({ userId: req.user._id });
 
     if (!cart) {

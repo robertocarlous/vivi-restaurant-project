@@ -8,6 +8,8 @@ const contactRouter = require("./src/route/contactroute").router
 const categoryRouter = require("./src/route/categoryroute").router
 const productRouter = require("./src/route/productroute").router
 const cartroute = require("./src/route/cartroute").router
+const  paymentRouter  = require("./src/service/paystack").router
+
 
 const errorHandler = require("./src/middleware/errorHandler")
 
@@ -31,6 +33,8 @@ app.use("/viviskitchen/contact", contactRouter);
 app.use("/viviskitchen/category", categoryRouter);
 app.use("/viviskitchen/product", productRouter);
 app.use("/viviskitchen/cart", cartroute);
+app.use('/viviskitchen/api', paymentRouter);
+
 
 
 
